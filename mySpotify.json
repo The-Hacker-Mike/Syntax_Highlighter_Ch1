@@ -1,0 +1,25 @@
+[
+  {
+    "song": "Rosanna",
+    "artist": "TOTO",
+    "album": "Toto IV",
+    "duration": 5.31,
+    "authors": ["David Paich", "TOTO"]
+  },
+
+  {
+    "song": "Sunset Jesus",
+    "artist": "Avicii",
+    "album": "Stories",
+    "duration": 4.24,
+    "authors": ["Savan Kotecha", "Alessandro Cavazza", "Carl Falk", "Dhani Lennevald", "Gavin DeGraw", "Mike Posner", "Rami Yacoub", "Tim Bergling"]
+  },
+
+  {
+    "song": "Roadhouse Blues",
+    "artist": "The Doors",
+    "album": "Morrison Hotel",
+    "duration": 4.04,
+    "authors": ["Jim Morrison", "John Densmore", "Ray Manzarek", "Roby Krieger", "Paul A Rothchild"]
+  }
+]
