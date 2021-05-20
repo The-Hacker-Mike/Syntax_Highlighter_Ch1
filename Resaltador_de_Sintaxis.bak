@@ -6,4 +6,54 @@ Emilio Sánchez
 
 #lang racket
 
-; actividad
+(define ourStr (file->string "mySpotify.json"))
+(define htmlFile (open-output-file "htmlFile.html"))
+(display "<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+    <meta charset=\"UTF-8\">
+    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>Document</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
+    #allContent{ 
+        font-family:'Yeseva One', cursive;
+        background-color: #121212;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+        font-size: 20px;
+    }
+    #intro {color: white; font-family: 'Italiana', serif;}
+    .key {color: #FF7597;}
+    .value {color: #BB86FC;}
+    .operator {color: #03DAC6;}
+    .parenthesis {color: #3700B3;}
+</style>
+<body>
+    <div id=\"allContent\">
+        <div id=\"intro\">
+            <h1>JSON Syntax Highlighter with Racket.</h1>
+            <h3>Developed by Diana Melo, Miguel Medina and Emilio Sanchez &#128512;</h3>
+        </div>" htmlFile)
+
+(define expression (open-input-string ourStr))
+(define currStr(string))
+(for ([c (in-input-port-chars expression)])
+  (define ops (list #\{ #\} #\( #\) #\[ #\]))
+  ;(define currStr (list '()))
+  ;(define currStr (make-string 0 #\nul))
+  (display " ")(cond
+               [(member c ops)(display "<span class=\"operator\">" htmlFile)(display c htmlFile)(display "</span>" htmlFile)]
+               [(regexp-match #px"\"[\\w]+\":" currStr)(define newStr(substring currStr 0 (- (string-length currStr) 1)))(display "<span class=\"key\">" htmlFile)(display newStr htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(set! currStr "")]
+               [(regexp-match #px"\"[\\w]+\"" currStr)(display currStr htmlFile)(set! currStr "")]
+               [(eq? c #\newline)(display "<br>" htmlFile)]
+               ;[(char-whitespace? c)(display "&nbsp;" htmlFile)]
+               [else(set! currStr (~a currStr (make-string 1 c)))(display currStr)]))
+;(display "<span class=\"key\">" htmlFile)(display currStr htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)
+(close-output-port htmlFile)
+
+  

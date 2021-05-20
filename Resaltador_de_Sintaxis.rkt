@@ -6,6 +6,8 @@ Emilio Sánchez
 
 #lang racket
 
+(require trace)
+
 (define ourStr (file->string "mySpotify.json"))
 (define htmlFile (open-output-file "htmlFile.html"))
 (display "<!DOCTYPE html>
@@ -41,19 +43,19 @@ Emilio Sánchez
         </div>" htmlFile)
 
 (define expression (open-input-string ourStr))
+(define currStr(string))
 (for ([c (in-input-port-chars expression)])
   (define ops (list #\{ #\} #\( #\) #\[ #\]))
   ;(define currStr (list '()))
-  (define currStr (make-string 0 #\nul))
-  (display c)(cond
-               ;[(eq? c #\:)(display "Se encontraron los dos puntitos" htmlFile)]
+  ;(define currStr (make-string 0 #\nul))
+  (display "")(cond
                [(member c ops)(display "<span class=\"operator\">" htmlFile)(display c htmlFile)(display "</span>" htmlFile)]
-               [(regexp-match #px"\"[\\w]+\":" currStr)(define newStr(substring currStr 0 (- (string-length currStr) 1)))(display "<span class=\"key\">" htmlFile)(display currStr htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(= currStr "")]
-               [(regexp-match #px"\"[\\w]+\"" currStr)(display currStr htmlFile)(= currStr "")]
+               [(not(not(regexp-match #px"\"[\\w]+\":" currStr)))(display "ENTRO")(define newStr(substring currStr 0 (- (string-length currStr) 1)))(display "<span class=\"key\">" htmlFile)(display newStr htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(set! currStr "")(set! newStr "")]
+               [(not(not (regexp-match #px"\"[\\w]+\"," currStr)))(display "Entro")(display "<span class=\"value\">" htmlFile)(define newStr(substring currStr 0 (- (string-length currStr) 1)))(display newStr htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">,</span>" htmlFile)(set! currStr "")(set! newStr "")]
                [(eq? c #\newline)(display "<br>" htmlFile)]
-               [(char-whitespace? c)(display "&nbsp;" htmlFile)]
-               [else(= currStr string-append currStr c)]))
-;(string->list ourStr)
+               ;[(char-whitespace? c)(display "&nbsp;" htmlFile)]
+               [else(set! currStr (~a currStr (make-string 1 c)))(display currStr)]))
+;(display "<span class=\"key\">" htmlFile)(display currStr htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)
 (close-output-port htmlFile)
 
   
