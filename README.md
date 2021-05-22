@@ -3,7 +3,7 @@
 ## Descripción del Programa ##
 Este programa es un resaltador de sintaxis, convierte un archivo de JSON a un HTML con CSS para tener un color diferente de texto dependiendo del tipo de dato.
 Este programa toma un archivo de JSON, lo convierte a un string y con expresiones regulares siguiendo el syntax valido del lenguaje. Hay expresiones regulares para:
- Markup : * Llave. Ej:"cancion":
+* Llave. Ej:"cancion":
           * Valor. Ej: "We are the champions"
           * Operadores como: , | ( | ) | [ | ] | { | } | :
           * Espacios
@@ -28,3 +28,8 @@ Los beneficios de utilizar pequeñas funciones son bastantes, "breaks down the p
 
 ## Conclusiones ##
 Todos los programas recursivos pueden también ser iterativos, esta clase nos ayudo a ver las ventajas de la recursión. Primero, se utilizan menos lineas de código y eso hace el código mucho más entendible. Elegir cuál usar depende de la situación, en este caso, era mucho más entendible y menos complejo a hacer el código de manera recursiva, además, los estados no mutan. Por último, tambien aprendimos que es mucho mejor utilizar pequeñas funciones que tratar de menter todas las tareas en una sola.
+
+ Markup : * Bullet list
+              * Nested bullet
+                  * Sub-nested bullet etc
+          * Bullet list item 2
