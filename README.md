@@ -14,7 +14,7 @@ Una nota importate para las expreiones regulares es que siempre se tienen que en
 Cada vez que se encuentra una coincidencia con una expresion dentro del cond, se utiliza display para escribir el substring en el archivo de HTML con su respectiva clase y <span> para evitar el salto de linea del <div>.
 Por último, se llama recursivamente la función con el string modificado desde el último indice de la expresión regular encontrada.
 - - - - 
-## Descripción del Programa ##
+## Performance ##
 Originalmente habíamos dado una solución a través de un programa iterativo pero optamos por resolverlo de forma recursiva ya que es una forma mucho más optiva de utilizar en Racket y en programación funcional.La complejidad por tratarse de un programa recursivo es O(n) donde n es el total de caracteres del texto de JSON, este en el peor caso que se da sólo cuando las expresiones regulares ocupen una longitud de uno. Inicialmente el programa iterativo tenía un tiempo de ejecución considerablemente más elongado que nuestro programa final pero este último tiene una velocidad bastante rápida. El número de iteraciones del programa dependerá siempre de la longitud del string que se maneje en el JSON, en nuestro caso el tiempo de ejecución no se extiende demasiado con una duración de 3 milisegundos ya que contamos solo con 3 objetos en con 5 llaves donde una de cada objeto tiene un array.
   
 ## Mejoras al código ##
