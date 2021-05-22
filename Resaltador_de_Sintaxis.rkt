@@ -34,6 +34,7 @@ Emilio Sánchez
     .operator {color: #03DAC6;}
     .parenthesis {color: #3700B3;}
     .digit{color: #767D92}
+
 </style>
 <body>
     <div id=\"allContent\">
@@ -49,22 +50,23 @@ Emilio Sánchez
       ;(display "termino")
   (cond
     ;Operations
-     [(regexp-match-positions #px"^(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr)(display "entro a operadores ")(display "<span class=\"operator\">" htmlFile)(display (car(regexp-match #px"^(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr)) htmlFile)(display "</span>" htmlFile)(display ". Se regreso: ")(display (substring ourStr (cdar(regexp-match-positions #px"(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr))))(loop(substring ourStr (cdar(regexp-match-positions #px"(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr))))]
+     [(regexp-match-positions #px"^(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr)(display "<span class=\"operator\">" htmlFile)(display (car(regexp-match #px"^(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr)) htmlFile)(display "</span>" htmlFile)(loop(substring ourStr (cdar(regexp-match-positions #px"(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr))))]
      ;New line
-     [(regexp-match #px"^\n|\r" ourStr)(display "<br>" htmlFile)(display "entro al enter")(loop(substring ourStr (cdar(regexp-match-positions #px"\n|\r" ourStr))))]
+     [(regexp-match #px"^\n|\r" ourStr)(display "<br>" htmlFile)(loop(substring ourStr (cdar(regexp-match-positions #px"\n|\r" ourStr))))]
      ;Whitespace
-     [(regexp-match #px"^ " ourStr)(display "Entro al espacio")(display "<span>&nbsp;</span>" htmlFile)(display ourStr)(loop(substring ourStr 1))]
+     [(regexp-match #px"^ " ourStr)(display "<span>&nbsp;</span>" htmlFile)(loop(substring ourStr 1))]
      ;Tab
      [(regexp-match #px"^\t" ourStr)(display "<span>&ensp;</span>" htmlFile)(loop(substring ourStr 1))]
      ;Ints or decimal numbers
-     [(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)(display "Entro al digito")(display "<span class=\"digit\">" htmlFile)(display (car(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)) htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^[\\d]+(\\.\\d+)?" ourStr))))]
+     [(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)(display "<span class=\"digit\">" htmlFile)(display (car(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)) htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^[\\d]+(\\.\\d+)?" ourStr))))]
      ;Key #px"^\".*\":"
-     [(regexp-match #px"^\"[\\w|\\s]+\":" ourStr)(display " entro a la llave: ")(display "<span class=\"key\">" htmlFile)(display (substring ourStr 0 (- (string-length(car(regexp-match #px"^\"[\\w|\\s]+\":" ourStr))) 1))htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[\\w|\\s]+\":" ourStr))))]
+     [(regexp-match #px"^\"[\\w|\\s]+\":" ourStr)(display "<span class=\"key\">" htmlFile)(display (substring ourStr 0 (- (string-length(car(regexp-match #px"^\"[\\w|\\s]+\":" ourStr))) 1))htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[\\w|\\s]+\":" ourStr))))]
      ;Value
-     [(regexp-match #px"^\"[\\w|\\s]+\"" ourStr)(display "entro al valor: ")(display (regexp-match #px"^\"[\\w|\\s]+\"" ourStr))(display "<span class=\"value\">" htmlFile)(display (car(regexp-match #px"^\"[\\w|\\s]+\"" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[\\w|\\s]+\"" ourStr))))]
+     [(regexp-match #px"^\"[\\w|\\s]+\"" ourStr)(display "<span class=\"value\">" htmlFile)(display (car(regexp-match #px"^\"[\\w|\\s]+\"" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[\\w|\\s]+\"" ourStr))))]
      ;bool
      [(regexp-match #px"^true$|^false$" ourStr)(display "<span class=\"bool\">" htmlFile)(display (car(regexp-match #px"^true$|^false$" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^true$|^false$" ourStr))))]
      ;When none works
      [else (display "no agarro nada, se estaba buscando! ")(display (substring ourStr 0 1))(close-output-port htmlFile)])))
-(loop ourStr)
+(time(loop ourStr))
   
+ 
