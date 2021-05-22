@@ -1,10 +1,10 @@
 [
   {
-    "song": "Rosanna",
-    "artist": "TOTO",
     "album": "Toto IV",
-    "duration": 5.31,
-    "authors": ["David Paich", "TOTO"]
+    "artist": "TOTO",
+    "authors": [ "David Paich", "TOTO" ],
+    "duration": 4.24,
+    "song": "Rosanna"
   },
 
   {
