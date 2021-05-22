@@ -10,6 +10,7 @@ Este programa toma un archivo de JSON, lo convierte a un string y con expresione
 * Tabuladores
 * Números enteros y decimales
 * Booleanos: true,false
+
 Una nota importante para las expresiones regulares es que siempre se tienen que encontrar al principio del string para no tomar los datos en desorden.
 Cada vez que se encuentra una coincidencia con una expresión dentro del cond, se utiliza display para escribir el substring en el archivo de HTML con su respectiva clase y span para evitar el salto de línea del div.
 Por último, se llama recursivamente la función con el string modificado desde el último índice de la expresión regular encontrada.
