@@ -3,13 +3,13 @@
 ## Descripción del Programa ##
 Este programa es un resaltador de sintaxis, convierte un archivo de JSON a un HTML con CSS para tener un color diferente de texto dependiendo del tipo de dato.
 Este programa toma un archivo de JSON, lo convierte a un string y con expresiones regulares siguiendo el syntax valido del lenguaje. Hay expresiones regulares para:
-*Llave. Ej:"cancion":
-*Valor. Ej: "We are the champions"
-*Operadores como: , | ( | ) | [ | ] | { | } | :
-*Espacios
-*Tabuladores
-*Numeros enteros y decimales
-*Booleanos: true,false
+ Markup : * Llave. Ej:"cancion":
+          * Valor. Ej: "We are the champions"
+          * Operadores como: , | ( | ) | [ | ] | { | } | :
+          * Espacios
+          * Tabuladores
+          * Numeros enteros y decimales
+          * Booleanos: true,false
 Una nota importate para las expreiones regulares es que siempre se tienen que encontrar al principio del string para no tomar los datos en desorden.
 Cada vez que se encuentra una coincidencia con una expresion dentro del cond, se utiliza display para escribir el substring en el archivo de HTML con su respectiva clase y span para evitar el salto de linea del div.
 Por último, se llama recursivamente la función con el string modificado desde el último indice de la expresión regular encontrada.
