@@ -33,7 +33,8 @@ Emilio Sánchez
     .value {color: #BB86FC;}
     .operator {color: #03DAC6;}
     .parenthesis {color: #3700B3;}
-    .digit{color: #767D92}
+    .digit{color: #767D92;}
+    .bool{color: blue;}
 
 </style>
 <body>
@@ -60,9 +61,9 @@ Emilio Sánchez
      ;Ints or decimal numbers
      [(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)(display "<span class=\"digit\">" htmlFile)(display (car(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)) htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^[\\d]+(\\.\\d+)?" ourStr))))]
      ;Key #px"^\".*\":"
-     [(regexp-match #px"^\"[\\w|\\s]+\":" ourStr)(display "<span class=\"key\">" htmlFile)(display (substring ourStr 0 (- (string-length(car(regexp-match #px"^\"[\\w|\\s]+\":" ourStr))) 1))htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[\\w|\\s]+\":" ourStr))))]
+     [(regexp-match #px"^\"[^\"]+\":" ourStr)(display "<span class=\"key\">" htmlFile)(display (substring ourStr 0 (- (string-length(car(regexp-match #px"^\"[^\"]+\":" ourStr))) 1))htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[^\"]+\":" ourStr))))]
      ;Value
-     [(regexp-match #px"^\"[\\w|\\s]+\"" ourStr)(display "<span class=\"value\">" htmlFile)(display (car(regexp-match #px"^\"[\\w|\\s]+\"" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[\\w|\\s]+\"" ourStr))))]
+     [(regexp-match #px"^\"[^\"]+\"" ourStr)(display "<span class=\"value\">" htmlFile)(display (car(regexp-match #px"^\"[^\"]+\"" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[^\"]+\"" ourStr))))]
      ;bool
      [(regexp-match #px"^true$|^false$" ourStr)(display "<span class=\"bool\">" htmlFile)(display (car(regexp-match #px"^true$|^false$" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^true$|^false$" ourStr))))]
      ;When none works
