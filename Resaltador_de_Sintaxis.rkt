@@ -8,8 +8,10 @@ Emilio Sánchez
 
 (require racket/trace)
 
-(define htmlFile (open-output-file "htmlFile.html"))
-(display "<!DOCTYPE html>
+;Function to create the html file and to call loop with the JSON file converted to string.
+(define (JsonFile theFile)
+  (define htmlFile (open-output-file (string-append (substring theFile 0 (- (string-length  theFile) 5)) ".html") #:exists 'truncate))
+  (display  "<!DOCTYPE html>
 <html lang=\"en\">
 <head>
     <meta charset=\"UTF-8\">
@@ -23,7 +25,7 @@ Emilio Sánchez
     #allContent{ 
         font-family:'Yeseva One', cursive;
         background-color: #121212;
-        height: 100vh;
+        height: auto;
         margin: 0;
         padding: 20px;
         font-size: 20px;
@@ -43,31 +45,47 @@ Emilio Sánchez
             <h1>JSON Syntax Highlighter with Racket.</h1>
             <h3>Developed by Diana Melo, Miguel Medina and Emilio Sanchez &#128512;</h3>
         </div>" htmlFile)
-(define ourStr (file->string "mySpotify.json"))
-(define(loop ourStr)
-  ;if (eq? (string-length ourStr) 0
-  (if (not (non-empty-string? ourStr))
-      (close-output-port htmlFile)
-      ;(display "termino")
-  (cond
-    ;Operations
-     [(regexp-match-positions #px"^(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr)(display "<span class=\"operator\">" htmlFile)(display (car(regexp-match #px"^(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr)) htmlFile)(display "</span>" htmlFile)(loop(substring ourStr (cdar(regexp-match-positions #px"(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)" ourStr))))]
-     ;New line
-     [(regexp-match #px"^\n|\r" ourStr)(display "<br>" htmlFile)(loop(substring ourStr (cdar(regexp-match-positions #px"\n|\r" ourStr))))]
-     ;Whitespace
-     [(regexp-match #px"^ " ourStr)(display "<span>&nbsp;</span>" htmlFile)(loop(substring ourStr 1))]
-     ;Tab
-     [(regexp-match #px"^\t" ourStr)(display "<span>&ensp;</span>" htmlFile)(loop(substring ourStr 1))]
-     ;Ints or decimal numbers
-     [(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)(display "<span class=\"digit\">" htmlFile)(display (car(regexp-match #px"^[\\d]+(\\.\\d+)?" ourStr)) htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^[\\d]+(\\.\\d+)?" ourStr))))]
-     ;Key #px"^\".*\":"
-     [(regexp-match #px"^\"[^\"]+\":" ourStr)(display "<span class=\"key\">" htmlFile)(display (substring ourStr 0 (- (string-length(car(regexp-match #px"^\"[^\"]+\":" ourStr))) 1))htmlFile)(display "</span>" htmlFile)(display "<span class=\"operator\">:</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[^\"]+\":" ourStr))))]
-     ;Value
-     [(regexp-match #px"^\"[^\"]+\"" ourStr)(display "<span class=\"value\">" htmlFile)(display (car(regexp-match #px"^\"[^\"]+\"" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^\"[^\"]+\"" ourStr))))]
-     ;bool
-     [(regexp-match #px"^true$|^false$" ourStr)(display "<span class=\"bool\">" htmlFile)(display (car(regexp-match #px"^true$|^false$" ourStr))htmlFile)(display "</span>" htmlFile)(loop (substring ourStr (cdar(regexp-match-positions #px"^true$|^false$" ourStr))))]
-     ;When none works
-     [else (display "no agarro nada, se estaba buscando! ")(display (substring ourStr 0 1))(close-output-port htmlFile)])))
-(time(loop ourStr))
+  (check (file->string theFile) htmlFile))
+
+;Function to write string into html
+(define (writeStrFunction strToWrite htmlFile)
+  (display strToWrite htmlFile)
+  (close-output-port htmlFile))
+  
+
+;Function to identify tokens with regular expresions
+(define(check ourStr htmlFile)
+  (define operation #px"^(?:\\(|\\)|\\[|\\]|\\{|\\}|\\,)")
+  (define enter #px"^\n|\r")
+  (define spc #px"^ ")
+  (define tab #px"^\t")
+  (define num #px"^[\\d]+(\\.\\d+)?")
+  (define key #px"^\"[^\"]+\":")
+  (define value #px"^\"([^\"]+|[ ]?)\"")
+  (define bool #px"^true|^false")
+  (let loop([ourStr ourStr] [htmlFile htmlFile] [creatingStr " "])
+    (if (not (non-empty-string? ourStr))
+        (writeStrFunction creatingStr htmlFile)
+        ;(display "termino")
+        (cond
+          ;Operations
+          [(regexp-match operation ourStr)(define result (car(regexp-match operation ourStr)))(loop (substring ourStr (string-length result)) htmlFile (string-append creatingStr "<span class=\"operator\">" result "</span>"))]
+          ;New line
+          [(regexp-match enter ourStr)(loop(substring ourStr 1) htmlFile (string-append creatingStr "<br>"))]
+          ;Whitespace
+          [(regexp-match spc ourStr)(loop(substring ourStr 1) htmlFile (string-append creatingStr "<span>&nbsp;</span>"))]
+          ;Tab
+          [(regexp-match tab ourStr)(loop(substring ourStr 1) htmlFile (string-append creatingStr "<span>&ensp;</span>"))]
+          ;Ints or decimal numbers
+          [(regexp-match num ourStr)(define result (car(regexp-match num ourStr)))(loop (substring ourStr (string-length result)) htmlFile (string-append creatingStr "<span class=\"digit\">" result "</span>"))]
+          ;Key 
+          [(regexp-match key ourStr)(define result (car(regexp-match key ourStr)))(loop (substring ourStr (string-length result)) htmlFile (string-append creatingStr "<span class=\"key\">" (substring result 0 (- (string-length result) 1)) "</span>" "<span class=\"operator\">:</span>"))]
+          ;Value
+          [(regexp-match value ourStr)(define result (car(regexp-match value ourStr)))(loop (substring ourStr (string-length result)) htmlFile (string-append creatingStr "<span class=\"value\">" result "</span>"))]
+          ;bool
+          [(regexp-match bool ourStr)(define result (car(regexp-match bool ourStr)))(loop (substring ourStr (string-length result)) htmlFile (string-append creatingStr "<span class=\"bool\">" result "</span>"))]
+          ;When none works
+          [else (display "no agarro nada, se estaba buscando! ")(display (substring ourStr 0 5))(close-output-port htmlFile)]))))
+;(time(loop ourStr))
   
  

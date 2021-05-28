@@ -4,7 +4,8 @@
     "artist": "TOTO",
     "authors": [ "David Paich", "TOTO" ],
     "duration": 4.24,
-    "song": "Rosanna"
+    "song": "Rosanna",
+    "liked":  true
   },
 
   {
@@ -12,7 +13,8 @@
     "artist": "Avicii",
     "album": "Stories",
     "duration": 4.24,
-    "authors": ["Savan Kotecha", "Alessandro Cavazza", "Carl Falk", "Dhani Lennevald", "Gavin DeGraw", "Mike Posner", "Rami Yacoub", "Tim Bergling"]
+    "authors": [ "Savan Kotecha", "Alessandro Cavazza", "Carl Falk", "Dhani Lennevald", "Gavin DeGraw", "Mike Posner", "Rami Yacoub", "Tim Bergling" ],
+    "liked": false
   },
 
   {
